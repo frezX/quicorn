@@ -9,3 +9,4 @@ class Config(BaseModel):
     certfile: Path = Path('keys/cert.pem')
     keyfile: Path = Path('keys/key.pem')
     password: SecretStr | None = None
+    debug: bool = False

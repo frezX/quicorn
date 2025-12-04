@@ -1,12 +1,10 @@
 from typing import Annotated
 from typing_extensions import Doc
 
-from quicorn.types import LifespanType
-
-type AppType = QuicApp
+from quicorn.types import Scope, Receive, Send, QSGIApplication, Lifespan
 
 
-class QuicApp:
+class QuicApp[AppType: QSGIApplication]:
     def __init__(
         self: AppType,
         *,
@@ -19,7 +17,7 @@ class QuicApp:
             ),
         ],
         lifespan: Annotated[
-            LifespanType[AppType],
+            Lifespan[AppType],
             Doc(
                 """
                 `Lifespan` manages app resources, running code on startup and shutdown.
@@ -28,4 +26,7 @@ class QuicApp:
         ],
     ) -> None:
         self.title: str = title
-        self.lifespan: LifespanType[AppType] = lifespan
+        self.lifespan: Lifespan[AppType] = lifespan
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        ...
