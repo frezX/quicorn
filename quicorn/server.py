@@ -12,7 +12,6 @@ class Server:
         self.config: Config = config
         self.runner: Runner = Runner(debug=self.config.debug, loop_factory=loop_factory)
 
-
     async def _run(self) -> None:
         await SHUTDOWN_EVENT.wait()
 
