@@ -7,8 +7,8 @@ from contextvars import Context, ContextVar, copy_context
 from asyncio import Task, AbstractEventLoop, Semaphore, get_running_loop, iscoroutinefunction
 
 from quicorn.graceful import TASKS
-from quicorn.logger import logger, formatter
 from quicorn.types import Sentinel, SentinelContextManager
+from quicorn.logger import logger, formatter, DEFAULT_OPTIONS
 
 from quicorn.graceful.timer import Timer, TimerData
 
@@ -54,7 +54,11 @@ def run_in_background[**P, R](_func: Func[P, R] = _func, *, semaphore: Semaphore
         if task.cancelled():
             logger.warning(formatter.join(f'Background task <m>`{name}`</m> has been canceled', duration))
         elif exc := task.exception():
-            logger.exception(
+            options: dict[str, Any] = {
+                'exception': exc,
+                **DEFAULT_OPTIONS.model_dump(exclude={'exception'}, exclude_defaults=True),
+            }
+            logger.opt(**options).error(
                 formatter.join(f'Background task <c>`{name}`</c> completed with error', formatter.escape(exc), duration)
             )
         else:
