@@ -45,6 +45,7 @@ class Config(BaseModel):
     @property
     def quic_configuration(self) -> QuicConfiguration:
         configuration: QuicConfiguration = QuicConfiguration(
+            is_client=False,
             connection_id_length=self.connection_id_length,
             idle_timeout=self.idle_timeout,
             max_data=self.max_data,

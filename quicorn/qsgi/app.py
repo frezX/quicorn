@@ -2,10 +2,12 @@ from typing import Annotated
 from typing_extensions import Doc
 
 from quicorn.logger import logger
-from quicorn.types import Scope, QSGIReceiveCallable, QSGISendCallable, QSGIApplication, Lifespan
+from quicorn.types import Scope, QSGIReceiveCallable, QSGISendCallable, Lifespan
+
+type AppType = QuicApp
 
 
-class QuicApp[AppType: QSGIApplication]:
+class QuicApp:
     def __init__(
         self: AppType,
         *,
