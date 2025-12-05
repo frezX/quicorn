@@ -1,7 +1,8 @@
 from typing import Annotated
 from typing_extensions import Doc
 
-from quicorn.types import Scope, Receive, Send, QSGIApplication, Lifespan
+from quicorn.logger import logger
+from quicorn.types import Scope, QSGIReceiveCallable, QSGISendCallable, QSGIApplication, Lifespan
 
 
 class QuicApp[AppType: QSGIApplication]:
@@ -28,5 +29,5 @@ class QuicApp[AppType: QSGIApplication]:
         self.title: str = title
         self.lifespan: Lifespan[AppType] = lifespan
 
-    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
-        ...
+    async def __call__(self, scope: Scope, receive: QSGIReceiveCallable, send: QSGISendCallable) -> None:
+        logger.info(f'Scope: {scope} | Receive: {receive} | Send: {send}')

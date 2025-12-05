@@ -19,7 +19,7 @@ TASKS: list[Task[Any]] = []
 SHUTDOWN_EVENT: Event = Event()
 
 
-def _shutdown_callback(signal: Signals) -> None:
+def shutdown_callback(signal: Signals) -> None:
     logger.info(f'Shutdown signal: <r>`{signal.name}(<lr>{signal.value}</lr>)`</r>')
     SHUTDOWN_EVENT.set()
 
@@ -31,7 +31,7 @@ def add_signals_handler(loop: AbstractEventLoop, callback: SignalCallbackType, s
 
 def event_loop_factory() -> AbstractEventLoop:
     loop: AbstractEventLoop = new_event_loop()
-    add_signals_handler(loop=loop, callback=_shutdown_callback, signals=(Signals.SIGINT, Signals.SIGTERM))
+    add_signals_handler(loop=loop, callback=shutdown_callback, signals=(Signals.SIGINT, Signals.SIGTERM))
     return loop
 
 
